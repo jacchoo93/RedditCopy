@@ -39,9 +39,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //populate default data
         populateDefaultTopic();
+        handleAddTopic();
 
         //Get ListView ID
         topicListView = findViewById(R.id.topicListView);
+        //Get Add Button
+        btnAddTopic = findViewById(R.id.btnAddTopic);
+
         Collections.sort(topics);
         adapter = new TopicAdapter(this,topics);
         topicListView.setAdapter(adapter);
@@ -58,6 +62,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnAddTopic.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),TopicAdd.class);
+                startActivity(intent);
+            }
+        });
+
 
 
     }
@@ -68,6 +79,18 @@ public class MainActivity extends AppCompatActivity {
         topics.add(new Topic("How good is facebook to younger generation?",5,1));
         topics.add(new Topic("Is a programmer a coffee addict?",50,0));
         topics.add(new Topic("Why am I always hungry?",100,10));
+    }
+
+    private void handleAddTopic() {
+        String newTitle = this.getIntent().getStringExtra("topicTitle");
+        if(!isEmptyString(newTitle))
+            topics.add(new Topic(newTitle,0,0));
+    }
+
+    private boolean isEmptyString(String newTitle) {
+        if(newTitle == "" || newTitle == null)
+            return true;
+        return false;
     }
 
     class TopicAdapter extends ArrayAdapter<Topic>{
